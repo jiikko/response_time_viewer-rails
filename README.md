@@ -21,6 +21,14 @@ Or install it yourself as:
 $ gem install response_time_viewer-rails
 ```
 
+## Development
+### start server
+```
+cd spec/dummy
+bundle exec rake db:create && bundle exec rake db:migrate
+bundle exec rails server
+```
+
 ## Contributing
 Contribution directions go here.
 

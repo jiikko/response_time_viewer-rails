@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = ResponseTimeViewer::Rails::VERSION
   s.authors     = ["jiikko"]
   s.email       = ["n905i.1214@gmail.com"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of ResponseTimeViewer::Rails."
-  s.description = "TODO: Description of ResponseTimeViewer::Rails."
+  s.homepage    = "https://github.com/jiikko/response_time_viewer-rails"
+  s.summary     = "ResponseTimeViewer::Rails."
+  s.description = s.summary
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
