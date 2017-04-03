@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     response_time_viewer-rails (0.1.0)
-      rails (~> 5.0.2)
 
 GEM
   remote: https://rubygems.org/
@@ -112,6 +111,7 @@ PLATFORMS
 
 DEPENDENCIES
   mysql2
+  rails (>= 4.2)
   response_time_viewer-rails!
 
 BUNDLED WITH
