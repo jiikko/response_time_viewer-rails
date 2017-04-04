@@ -18,4 +18,8 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "rails", ">= 4.2"
   s.add_development_dependency "mysql2"
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "rspec-rails"
+  s.add_development_dependency "spring"
+  s.add_development_dependency "pry"
 end

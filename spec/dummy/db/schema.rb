@@ -13,17 +13,17 @@
 ActiveRecord::Schema.define(version: 20170403143701) do
 
   create_table "response_time_viewer_rails_summarized_requests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "path",          limit: 191,             null: false
-    t.string   "params",        limit: 191,             null: false
+    t.string   "path",          limit: 191,               null: false
+    t.string   "params",        limit: 191
     t.datetime "summarized_at"
-    t.integer  "device",                                null: false
-    t.integer  "merged_count",                          null: false
-    t.integer  "total_ms",                  default: 0, null: false
-    t.integer  "view_ms",                   default: 0, null: false
-    t.integer  "ar_ms",                     default: 0, null: false
-    t.integer  "solr_ms",                   default: 0, null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.integer  "device",                                  null: false
+    t.integer  "merged_count",                            null: false
+    t.float    "total_ms",      limit: 24,  default: 0.0, null: false
+    t.float    "view_ms",       limit: 24,  default: 0.0, null: false
+    t.float    "ar_ms",         limit: 24,  default: 0.0, null: false
+    t.float    "solr_ms",       limit: 24,  default: 0.0, null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
   end
 
 end
