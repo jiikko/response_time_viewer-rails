@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20170403143701) do
     t.float    "solr_ms",       limit: 24,  default: 0.0, null: false
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
+    t.index ["summarized_at", "path"], name: "index_summarized_requests_summarized_at_path", using: :btree
   end
 
 end

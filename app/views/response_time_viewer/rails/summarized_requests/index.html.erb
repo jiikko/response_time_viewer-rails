@@ -1,0 +1,50 @@
+<%= form_for @search_object, url: root_path, method: :get do |f| %>
+  <table>
+  <tbody>
+  <tr>
+    <td width='100px'>
+      <div>
+       両方 <%= f.radio_button :device, false, checked: true  %>
+      </div>
+      <div>
+        pc
+        <%= f.radio_button :device, :pc %>
+      </div>
+      <div>
+        sp
+        <%= f.radio_button :device, :sp %>
+      </div>
+    </td>
+    <td>
+      前方一致のパス
+      <div>
+        <%= f.text_field :path %>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  <div><%= f.submit %></div>
+<% end %>
+
+<table border='1'>
+  <thead>
+    <tr>
+      <th>path</th>
+      <th>summarized_at</th>
+      <th>total_ms</th>
+      <th>device</th>
+    </tr>
+
+  </thead>
+  <tbody>
+    <%- @summarized_requests.each do |summarized_request| %>
+      <tr>
+        <td><%= summarized_request.path_with_params[0..40] %></td>
+        <td><%= summarized_request.summarized_at.strftime("%Y年%m月%d日 %H時%M分")  %></td>
+        <td><%= summarized_request.total_ms %></td>
+        <td><%= summarized_request.device %></td>
+      </tr>
+    <% end %>
+  </tbody>
+

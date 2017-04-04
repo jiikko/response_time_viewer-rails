@@ -10,6 +10,9 @@ require "action_cable/engine"
 # require "rails/test_unit/railtie"
 require "sprockets/railtie"
 
+# depency gems
+require 'kaminari'
+
 Bundler.require(*Rails.groups)
 require "response_time_viewer/rails"
 
