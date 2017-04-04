@@ -1,4 +1,4 @@
-class ResponseTimeViewer::Rails::SummarizedRequest < ApplicationRecord
+class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::ApplicationRecord
   enum device: %i(pc sp)
 
   scope :search_by_path, ->(keyword) { where('path like ?', "#{sanitize_sql_like(keyword)}%") }
