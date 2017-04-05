@@ -1,16 +1,20 @@
+require 'activerecord-import'
+require "activerecord-import/base"
+ActiveRecord::Import.require_adapter('mysql2')
+
 class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::ApplicationRecord
   enum device: %i(pc sp)
 
   scope :search_by_path, ->(keyword) { where('path like ?', "#{sanitize_sql_like(keyword)}%") }
 
-  # bulk insert
-  def self.import(file)
-    file.each_line do |line|
+  # 一度に26万件入ったが1万件ずつにわけたい
+  def self.import_from_file(file)
+    list = file.each_line.map do |line|
       hash = JSON.parse(line)
       splited = hash['path'].split('?')
       path_without_params = splited[0] && splited[0][0..190]
       params = splited[1] && splited[1][0..190]
-      self.create!(
+      self.new(
         path: path_without_params,
         params: params,
         summarized_at: Time.parse(hash['time']),
@@ -22,11 +26,12 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
         solr_ms: hash['mss']['Solr'] || 0,
       )
     end
+    self.import(list)
   end
 
   def path_with_params
     if params
-    "#{path}?#{params}"
+      "#{path}?#{params}"
     else
       path
     end

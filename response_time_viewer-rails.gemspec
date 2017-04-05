@@ -19,6 +19,8 @@ Gem::Specification.new do |s|
   s.add_dependency "kaminari"
   s.add_dependency "rails", ">= 4.2"
   s.add_dependency "mysql2"
+  s.add_dependency "activerecord-import"
+  s.add_dependency "lazy_high_charts"
 
   s.add_development_dependency "rspec"
   s.add_development_dependency "rspec-rails"
