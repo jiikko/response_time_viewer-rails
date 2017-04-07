@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170403143701) do
+ActiveRecord::Schema.define(version: 20170407003002) do
 
   create_table "response_time_viewer_rails_summarized_requests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "path",          limit: 191,               null: false
@@ -25,6 +25,20 @@ ActiveRecord::Schema.define(version: 20170403143701) do
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
     t.index ["summarized_at", "path"], name: "index_summarized_requests_summarized_at_path", using: :btree
+  end
+
+  create_table "response_time_viewer_rails_watching_url_groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name",         null: false
+    t.integer  "watching_url", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["watching_url"], name: "index_watching_url_groups_watching_url", using: :btree
+  end
+
+  create_table "response_time_viewer_rails_watching_urls", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "path",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
