@@ -5,18 +5,22 @@ class ResponseTimeViewer::Rails::SearchObject
 
   def initialize(params)
     super(params)
+    @relation = ResponseTimeViewer::Rails::SummarizedRequest.all
+  end
+
+  def add_condition!(watching_urls: )
+    @relation.where!(path: watching_urls.select(:path))
   end
 
   def summarized_requests
-    relation = ResponseTimeViewer::Rails::SummarizedRequest.all
-    if device != 'false' || !device
-      relation.where!(device: device)
+    if device.present? && device != 'false'
+      @relation.where!(device: device)
     end
 
     if path.present?
-      relation = relation.like_search_by_path(path)
+      @relation = @relation.like_search_by_path(path)
     end
 
-    relation.order(:summarized_at)
+    @relation.order(:summarized_at)
   end
 end

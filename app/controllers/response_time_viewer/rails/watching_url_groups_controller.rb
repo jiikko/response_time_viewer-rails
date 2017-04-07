@@ -30,9 +30,6 @@ module ResponseTimeViewer::Rails
       end
     end
 
-    def chart
-    end
-
     private
 
     def watching_url_group_params

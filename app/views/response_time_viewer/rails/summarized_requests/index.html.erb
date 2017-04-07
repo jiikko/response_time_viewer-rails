@@ -1,6 +1,6 @@
 <%= link_to 'top', root_path %>
 
-<%= form_for @search_object, url: summarized_requests_path, method: :get do |f| %>
+<%= form_for @search_object, url: "/response_time_viewer#{request.path_info}", method: :get do |f| %>
   <table>
   <tbody>
   <tr>
