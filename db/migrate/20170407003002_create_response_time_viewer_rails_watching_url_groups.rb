@@ -4,6 +4,7 @@ class CreateResponseTimeViewerRailsWatchingUrlGroups < ActiveRecord::Migration[5
       t.string :name, null: false
       t.integer :watching_url, null: false
       t.index :watching_url, name: :index_watching_url_groups_watching_url
+      t.integer :watchi_urls_counter, null: false, default: 0
       t.text :memo, null: false
 
       t.timestamps
