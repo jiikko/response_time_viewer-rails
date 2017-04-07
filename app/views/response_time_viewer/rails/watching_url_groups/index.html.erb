@@ -1,0 +1,25 @@
+<div>
+  <%= link_to '新規作成', new_watching_url_group_path %>
+</div>
+
+<table border='1'>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>memo</th>
+      <th>watchi_urls_counter</th>
+      <th>-</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- @groups.each do |group| %>
+      <tr>
+        <td><%= group.path %></td>
+        <td><%= group.memo  %></td>
+        <td><%= link_to 'edit', edit_watching_url_group_path(group) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'top', root_path %>

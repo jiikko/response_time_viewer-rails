@@ -29,12 +29,10 @@ ActiveRecord::Schema.define(version: 20170407003002) do
 
   create_table "response_time_viewer_rails_watching_url_groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name",                                          null: false
-    t.integer  "watching_url",                                  null: false
     t.integer  "watchi_urls_counter",               default: 0, null: false
     t.text     "memo",                limit: 65535,             null: false
     t.datetime "created_at",                                    null: false
     t.datetime "updated_at",                                    null: false
-    t.index ["watching_url"], name: "index_watching_url_groups_watching_url", using: :btree
   end
 
   create_table "response_time_viewer_rails_watching_urls", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

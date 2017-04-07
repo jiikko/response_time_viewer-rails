@@ -1,0 +1,13 @@
+<%= form_for @group do |f| %>
+  <div>
+    name:
+    <%= f.text_field :name %>
+  </div>
+  <div>
+    メモ
+    <%= f.text_field :memo %>
+  </div>
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>
