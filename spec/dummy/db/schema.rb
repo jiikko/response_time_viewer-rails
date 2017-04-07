@@ -24,13 +24,14 @@ ActiveRecord::Schema.define(version: 20170407113314) do
     t.float    "solr_ms",       limit: 24,  default: 0.0, null: false
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
+    t.index ["path"], name: "index_summarized_requests_path", using: :btree
     t.index ["summarized_at", "path"], name: "index_summarized_requests_summarized_at_path", using: :btree
   end
 
   create_table "response_time_viewer_rails_watching_url_groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name",                                          null: false
     t.integer  "watchi_urls_counter",               default: 0, null: false
-    t.text     "memo",                limit: 65535,             null: false
+    t.text     "memo",                limit: 65535
     t.datetime "created_at",                                    null: false
     t.datetime "updated_at",                                    null: false
   end
@@ -41,10 +42,9 @@ ActiveRecord::Schema.define(version: 20170407113314) do
   end
 
   create_table "response_time_viewer_rails_watching_urls", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "path",                     null: false
-    t.text     "memo",       limit: 65535, null: false
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.string   "path",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

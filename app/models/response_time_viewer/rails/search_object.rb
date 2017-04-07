@@ -14,7 +14,7 @@ class ResponseTimeViewer::Rails::SearchObject
     end
 
     if path.present?
-      relation = relation.search_by_path(path)
+      relation = relation.like_search_by_path(path)
     end
 
     relation.order(:summarized_at)

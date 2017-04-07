@@ -8,7 +8,6 @@
   <thead>
     <tr>
       <th>path</th>
-      <th>memo</th>
       <th>-</th>
     </tr>
   </thead>
@@ -16,7 +15,6 @@
     <%- @urls.each do |url| %>
       <tr>
         <td><%= url.path %></td>
-        <td><%= url.memo  %></td>
         <td><%= link_to 'edit', edit_watching_url_path(url) %></td>
       </tr>
     <% end %>
