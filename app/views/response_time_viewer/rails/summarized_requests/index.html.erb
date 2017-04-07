@@ -1,4 +1,6 @@
-<%= form_for @search_object, url: root_path, method: :get do |f| %>
+<%= link_to 'top', root_path %>
+
+<%= form_for @search_object, url: summarized_requests_path, method: :get do |f| %>
   <table>
   <tbody>
   <tr>
@@ -47,4 +49,3 @@
       </tr>
     <% end %>
   </tbody>
-

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170407003002) do
+ActiveRecord::Schema.define(version: 20170407113314) do
 
   create_table "response_time_viewer_rails_summarized_requests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "path",          limit: 191,               null: false
@@ -33,6 +33,11 @@ ActiveRecord::Schema.define(version: 20170407003002) do
     t.text     "memo",                limit: 65535,             null: false
     t.datetime "created_at",                                    null: false
     t.datetime "updated_at",                                    null: false
+  end
+
+  create_table "response_time_viewer_rails_watching_url_groups_urls", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "watching_url_group_id"
+    t.integer "watching_url_id"
   end
 
   create_table "response_time_viewer_rails_watching_urls", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

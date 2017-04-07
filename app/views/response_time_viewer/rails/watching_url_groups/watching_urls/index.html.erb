@@ -1,0 +1,59 @@
+<h1>
+  <%= @watching_url_group.name %>グループのURL編集
+</h1>
+
+<%= link_to 'top', root_path %>
+
+<h2>
+  登録されているURL
+</h2>
+<table border='1'>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>memo</th>
+      <th>-</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- @watching_urls.each do |watching_url| %>
+      <tr>
+        <td><%= watching_url.path %></td>
+        <td><%= watching_url.memo  %></td>
+        <td>
+          <%= form_tag watching_url_group_watching_url_path(@watching_url_group, watching_url), method: :delete do %>
+            <%= hidden_field_tag :watching_url_id, watching_url.id %>
+            <%= submit_tag '削除する' %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>
+  登録可能URL
+</h2>
+<table border='1'>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>memo</th>
+      <th>-</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- @addable_watching_urls.each do |watching_url| %>
+      <tr>
+        <td><%= watching_url.path %></td>
+        <td><%= watching_url.memo %></td>
+        <td>
+          <%# link_to ..., ..., method: :post でしたかったけど開発環境で ujs が動かないのでformにする %>
+          <%= form_tag watching_url_group_watching_urls_path(@watching_url_group), method: :post do %>
+            <%= hidden_field_tag :watching_url_id, watching_url.id %>
+            <%= submit_tag '追加する' %>
+          <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -2,6 +2,8 @@
   <%= link_to '新規作成', new_watching_url_group_path %>
 </div>
 
+<%= link_to 'top', root_path %>
+
 <table border='1'>
   <thead>
     <tr>
@@ -9,17 +11,18 @@
       <th>memo</th>
       <th>watchi_urls_counter</th>
       <th>-</th>
+      <th>-</th>
     </tr>
   </thead>
   <tbody>
     <%- @groups.each do |group| %>
       <tr>
-        <td><%= group.path %></td>
+        <td><%= group.name %></td>
         <td><%= group.memo  %></td>
+        <td>-</td>
         <td><%= link_to 'edit', edit_watching_url_group_path(group) %></td>
+        <td><%= link_to 'url を編集する', watching_url_group_watching_urls_path(group) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<%= link_to 'top', root_path %>

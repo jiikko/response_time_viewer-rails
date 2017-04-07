@@ -30,6 +30,10 @@ module ResponseTimeViewer::Rails
       end
     end
 
+    def edit_urls
+      @group = WatchingUrlGroup.find(params[:id])
+    end
+
     private
 
     def watching_url_group_params
