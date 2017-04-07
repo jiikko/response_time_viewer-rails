@@ -30,8 +30,7 @@ module ResponseTimeViewer::Rails
       end
     end
 
-    def edit_urls
-      @group = WatchingUrlGroup.find(params[:id])
+    def chart
     end
 
     private
