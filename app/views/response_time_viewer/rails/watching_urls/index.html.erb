@@ -1,0 +1,22 @@
+<div>
+  <%= link_to '新規作成', new_watching_url_path %>
+</div>
+
+<table border='1'>
+  <thead>
+    <tr>
+      <th>path</th>
+      <th>memo</th>
+      <th>-</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- @urls.each do |url| %>
+      <tr>
+        <td><%= url.path %></td>
+        <td><%= url.memo  %></td>
+        <td><%= link_to 'edit', edit_watching_url_path(url) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
