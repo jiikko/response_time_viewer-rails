@@ -5,7 +5,8 @@ ActiveRecord::Import.require_adapter('mysql2')
 class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::ApplicationRecord
   enum device: %i(pc sp)
 
-  scope :search_by_path, ->(keyword) { where('path like ?', "#{sanitize_sql_like(keyword)}%") }
+  scope :like_search_by_path, ->(keyword) { where('path like ?', "#{sanitize_sql_like(keyword)}%") }
+  scope :search_by_path, ->(path) { where('path = ?', path) }
 
   # 一度に26万件入ったが1万件ずつにわけたい
   def self.import_from_file(file)
