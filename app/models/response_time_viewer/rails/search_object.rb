@@ -23,4 +23,18 @@ class ResponseTimeViewer::Rails::SearchObject
 
     @relation.order(:summarized_at)
   end
+
+  def series
+    [
+      { name: 'aaaaaaaaa',
+        type: 'line',
+        data: [1111, 22, 22],
+        color: '#00f',
+      },
+    ]
+  end
+
+  def period
+    []
+  end
 end
