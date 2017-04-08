@@ -35,32 +35,36 @@
   </script>
   <div id="container"></div>
 
-<%= form_for @search_object, url: "/response_time_viewer#{request.path_info}", method: :get do |f| %>
-  <table>
-    <tbody>
-      <tr>
-    <td width='100px'>
-      <div>
-       両方 <%= f.radio_button :device, false, checked: true  %>
-      </div>
-      <div>
-        pc
-        <%= f.radio_button :device, :pc %>
-      </div>
-      <div>
-        sp
-        <%= f.radio_button :device, :sp %>
-      </div>
-    </td>
-    <td>
-      前方一致のパス
-      <div>
-        <%= f.text_field :path %>
-      </div>
-    </td>
-  </tr>
-  </tbody>
-  </table>
+  <%= form_for @search_object, url: "/response_time_viewer#{request.path_info}", method: :get do |f| %>
+    <table border=1>
+      <tbody>
+        <tr>
+          <td width='100px'>
+            <div>
+              両方 <%= f.radio_button :device, false, checked: true  %>
+          </div>
+          <div>
+            pc
+            <%= f.radio_button :device, :pc %>
+          </div>
+          <div>
+            sp
+            <%= f.radio_button :device, :sp %>
+          </div>
+          </td>
+          <td>
+            前方一致のパス
+            <div>
+              <%= f.text_field :path %>
+            </div>
+          </td>
+          <td>
+            <%= f.date_field :start_on %>
+            <%= f.date_field :end_on %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   <div><%= f.submit %></div>
 <% end %>
 
