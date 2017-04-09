@@ -19,47 +19,10 @@ class ResponseTimeViewer::Rails::SearchObject
     if device.present? && device != 'false'
       @relation.where!(device: device)
     end
-
     if path.present?
       @relation = @relation.like_search_by_path(path)
     end
-
-    # @summarized_requests = @relation.order(:summarized_at)
-
     @summarized_requests = @relation
-  end
-
-  def series
-    list = []
-    summarized_requests.group_by(&:path).map do |path, summarized_requests|
-      hash = {
-        name: path,
-        type: 'line',
-        data: [],
-      }
-      prev_date = nil
-      period.each do |current_date|
-        unless prev_date
-          prev_date = current_date # TODO 初回時をskipしないようにする
-          next
-        end
-        found_data_in_period = false
-        summarized_requests.each do |summarized_request|
-          # 二分探索使える
-          if (prev_date.to_datetime..current_date.to_datetime).include?(summarized_request.summarized_at.to_datetime)
-            found_data_in_period = true
-            hash[:data] << summarized_request.total_ms
-            break
-          end
-        end
-        unless found_data_in_period
-          hash[:data] << 0
-        end
-        prev_date = current_date
-      end
-      list << hash
-    end
-    list
   end
 
   def period
@@ -67,6 +30,17 @@ class ResponseTimeViewer::Rails::SearchObject
       current_date = date.beginning_of_day
       (1.day / 5.minutes).times.map { |x| current_date = current_date + 5.minutes }
     end
+  end
+
+  def chart_data
+    list = []
+    summarized_requests.group_by(&:path).each do |path, records|
+      hash = {}
+      hash[:name] = path
+      hash[:data] = records.map { |x| [x.summarized_at, x.total_ms] }
+      list << hash
+    end
+    list
   end
 
   private
