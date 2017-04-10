@@ -52,8 +52,12 @@
     <tr>
       <th>path</th>
       <th>summarized_at</th>
+      <th>view_ms</th>
+      <th>activerecord_ms</th>
+      <th>solr_ms</th>
       <th>total_ms</th>
       <th>device</th>
+      <th>merged_count</th>
     </tr>
 
   </thead>
@@ -62,8 +66,12 @@
       <tr>
         <td><%= summarized_request.path_with_params[0..40] %></td>
         <td><%= summarized_request.summarized_at.strftime("%Y年%m月%d日 %H時%M分")  %></td>
+        <td><%= summarized_request.view_ms %></td>
+        <td><%= summarized_request.ar_ms %></td>
+        <td><%= summarized_request.solr_ms %></td>
         <td><%= summarized_request.total_ms %></td>
         <td><%= summarized_request.device %></td>
+        <td><%= summarized_request.merged_count %></td>
       </tr>
     <% end %>
   </tbody>
