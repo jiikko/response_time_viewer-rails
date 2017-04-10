@@ -1,49 +1,41 @@
 <%= link_to 'top', root_path %>
-<%#
-  hash = [
-    { name: :ggg, data: [[DateTime.new(2011, 1, 1), 2], [DateTime.new(2011, 1, 3), 2]] },
-    # { name: :ggg, data: [[DateTime.new(2011, 1, 1), 2], [DateTime.new(2011, 1, 2), 2], [DateTime.new(2011, 1, 3), 2]] },
-    { name: :ggg2, data: [[DateTime.new(2011, 1, 1), 3], [DateTime.new(2011, 1, 2), 5], [DateTime.new(2011, 1, 3), 4]] },
-  ]
-  line_chart hash, download: true, discrete: true
-%>
-  <%= line_chart @search_object.chart_data, download: true, stacked: true, curve: false, donut: true %>
-  <%= form_for @search_object, url: "/response_time_viewer#{request.path_info}", method: :get do |f| %>
-    <table border=1>
-      <tbody>
-        <tr>
-          <td width='100px'>
-            <div>
-              両方 <%= f.radio_button :device, false, checked: true  %>
-          </div>
+<%= line_chart @search_object.chart_data, download: true, stacked: true, curve: false, donut: true %>
+<%= form_for @search_object, url: "/response_time_viewer#{request.path_info}", method: :get do |f| %>
+  <table border=1>
+    <tbody>
+      <tr>
+        <td width='100px'>
           <div>
-            pc
-            <%= f.radio_button :device, :pc %>
-          </div>
+            両方 <%= f.radio_button :device, false, checked: true  %>
+        </div>
+        <div>
+          pc
+          <%= f.radio_button :device, :pc %>
+        </div>
+        <div>
+          sp
+          <%= f.radio_button :device, :sp %>
+        </div>
+        </td>
+        <td>
+          前方一致のパス
           <div>
-            sp
-            <%= f.radio_button :device, :sp %>
+            <%= f.text_field :path %>
           </div>
-          </td>
-          <td>
-            前方一致のパス
-            <div>
-              <%= f.text_field :path %>
-            </div>
-          </td>
-          <td>
-            完全一致のパス(not include params)
-            <div>
-              <%= f.text_field :full_match_path %>
-            </div>
-          </td>
-          <td>
-            <%= f.date_field :start_on %>
-            <%= f.date_field :end_on %>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        </td>
+        <td>
+          完全一致のパス(not include params)
+          <div>
+            <%= f.text_field :full_match_path %>
+          </div>
+        </td>
+        <td>
+          <%= f.date_field :start_on %>
+          <%= f.date_field :end_on %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
   <div><%= f.submit %></div>
 <% end %>
 
