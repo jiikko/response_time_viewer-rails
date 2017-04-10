@@ -11,7 +11,7 @@ module ResponseTimeViewer::Rails
     def create
       @group = WatchingUrlGroup.new(watching_url_group_params)
       if @group.save
-        redirect_to watching_urls_url, notice: '新規作成しました'
+        redirect_to watching_url_groups_url, notice: '新規作成しました'
       else
         render :new
       end
@@ -24,7 +24,7 @@ module ResponseTimeViewer::Rails
     def update
       @group = WatchingUrlGroup.find(params[:id])
       if @group.update(watching_url_group_params)
-        redirect_to watching_urls_url, notice: '更新しました'
+        redirect_to watching_url_groups_url, notice: '更新しました'
       else
         render :edit
       end
