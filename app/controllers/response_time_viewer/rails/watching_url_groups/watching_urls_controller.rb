@@ -3,7 +3,9 @@ module ResponseTimeViewer::Rails
     def index
       @watching_url_group = WatchingUrlGroup.find(params[:watching_url_group_id])
       @watching_urls = @watching_url_group.watching_urls
-      @addable_watching_urls = WatchingUrl.where.not(id: @watching_urls)
+      @addable_watching_urls = WatchingUrl.where.not(id: @watching_urls).
+        page(params[:page]).
+        per(200)
     end
 
     def create

@@ -5,8 +5,8 @@ ActiveRecord::Import.require_adapter('mysql2')
 class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::ApplicationRecord
   enum device: %i(pc sp)
 
-  scope :like_search_by_path, ->(keyword) { where('path like ?', "#{sanitize_sql_like(keyword)}%") }
-  scope :search_by_path, ->(path) { where('path = ?', path) }
+  scope :like_search_by_path, ->(keyword) { where('path_with_params like ?', "#{sanitize_sql_like(keyword)}%") }
+  scope :search_by_path, ->(path) { where('path_with_params = ?', path) }
 
   # 一度に26万件入ったが1万件ずつにわけたい
   def self.import_from_file(file)
@@ -28,6 +28,7 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
         params = splited[1] && splited[1][0..190]
         summarized_requests << self.new(
           path: path_without_params,
+          path_with_params: hash['path'][0..190],
           params: params,
           summarized_at: Time.parse(hash['time']),
           device: hash['user_agent'],

@@ -13,18 +13,20 @@
 ActiveRecord::Schema.define(version: 20170407113314) do
 
   create_table "response_time_viewer_rails_summarized_requests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "path",          limit: 191,               null: false
-    t.string   "params",        limit: 191
+    t.string   "path",             limit: 191,               null: false
+    t.string   "params",           limit: 191
+    t.string   "path_with_params", limit: 191,               null: false
     t.datetime "summarized_at"
-    t.integer  "device",                                  null: false
-    t.integer  "merged_count",                            null: false
-    t.float    "total_ms",      limit: 24,  default: 0.0, null: false
-    t.float    "view_ms",       limit: 24,  default: 0.0, null: false
-    t.float    "ar_ms",         limit: 24,  default: 0.0, null: false
-    t.float    "solr_ms",       limit: 24,  default: 0.0, null: false
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.integer  "device",                                     null: false
+    t.integer  "merged_count",                               null: false
+    t.float    "total_ms",         limit: 24,  default: 0.0, null: false
+    t.float    "view_ms",          limit: 24,  default: 0.0, null: false
+    t.float    "ar_ms",            limit: 24,  default: 0.0, null: false
+    t.float    "solr_ms",          limit: 24,  default: 0.0, null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.index ["path"], name: "index_summarized_requests_path", using: :btree
+    t.index ["path_with_params"], name: "index_summarized_requests_path_with_params", using: :btree
     t.index ["summarized_at", "path"], name: "index_summarized_requests_summarized_at_path", using: :btree
   end
 

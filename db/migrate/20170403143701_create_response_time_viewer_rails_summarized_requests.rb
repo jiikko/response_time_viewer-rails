@@ -3,6 +3,7 @@ class CreateResponseTimeViewerRailsSummarizedRequests < ActiveRecord::Migration[
     create_table :response_time_viewer_rails_summarized_requests do |t|
       t.string :path, null: false, limit: 191
       t.string :params, limit: 191
+      t.string :path_with_params, null: false, limit: 191
       t.datetime :summarized_at, nul: false
       t.integer :device, null: false
       t.integer :merged_count, null: false
@@ -12,6 +13,7 @@ class CreateResponseTimeViewerRailsSummarizedRequests < ActiveRecord::Migration[
       t.float :solr_ms, null: false, default: 0
       t.index [:summarized_at, :path], name: :index_summarized_requests_summarized_at_path
       t.index :path, name: :index_summarized_requests_path
+      t.index :path_with_params, name: :index_summarized_requests_path_with_params
 
       t.timestamps null: false
     end

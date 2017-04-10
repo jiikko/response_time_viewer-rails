@@ -161,6 +161,7 @@ PLATFORMS
 
 DEPENDENCIES
   chartkick
+  kaminari
   pry
   response_time_viewer-rails!
   rspec

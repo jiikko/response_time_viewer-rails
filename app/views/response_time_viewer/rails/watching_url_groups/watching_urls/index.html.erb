@@ -2,7 +2,15 @@
   <%= @watching_url_group.name %>グループのURL編集
 </h1>
 
-<%= link_to 'top', root_path %>
+<div>
+  <%= link_to 'top', root_path %>
+</div>
+<div>
+  <%= link_to 'グループの一覧', watching_url_groups_path %>
+</div>
+<div>
+  <%= link_to 'チャートを見る', watching_url_group_summarized_requests_path(@watching_url_group) %>
+</div>
 
 <h2>
   登録されているURL
@@ -32,6 +40,7 @@
 <h2>
   登録可能URL
 </h2>
+<%= paginate @addable_watching_urls %>
 <table border='1'>
   <thead>
     <tr>
@@ -53,3 +62,4 @@
     <% end %>
   </tbody>
 </table>
+<%= paginate @addable_watching_urls %>

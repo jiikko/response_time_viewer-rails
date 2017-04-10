@@ -9,7 +9,7 @@
     <tr>
       <th>name</th>
       <th>memo</th>
-      <th>watchi_urls_counter</th>
+      <th>登録しているURL</th>
       <th>-</th>
       <th>-</th>
       <th>-</th>
@@ -20,7 +20,7 @@
       <tr>
         <td><%= group.name %></td>
         <td><%= group.memo  %></td>
-        <td>-</td>
+        <td><%= group.watching_urls.count %></td>
         <td><%= link_to 'edit', edit_watching_url_group_path(group) %></td>
         <td><%= link_to 'url を編集する', watching_url_group_watching_urls_path(group) %></td>
         <td><%= link_to 'chart を見る', watching_url_group_summarized_requests_path(group) %></td>
