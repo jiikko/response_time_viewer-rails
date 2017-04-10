@@ -1,5 +1,13 @@
 <%= link_to 'top', root_path %>
-  <%= line_chart @search_object.chart_data, download: true %>
+<%#
+  hash = [
+    { name: :ggg, data: [[DateTime.new(2011, 1, 1), 2], [DateTime.new(2011, 1, 3), 2]] },
+    # { name: :ggg, data: [[DateTime.new(2011, 1, 1), 2], [DateTime.new(2011, 1, 2), 2], [DateTime.new(2011, 1, 3), 2]] },
+    { name: :ggg2, data: [[DateTime.new(2011, 1, 1), 3], [DateTime.new(2011, 1, 2), 5], [DateTime.new(2011, 1, 3), 4]] },
+  ]
+  line_chart hash, download: true, discrete: true
+%>
+  <%= line_chart @search_object.chart_data, download: true, stacked: true, curve: false, donut: true %>
   <%= form_for @search_object, url: "/response_time_viewer#{request.path_info}", method: :get do |f| %>
     <table border=1>
       <tbody>
@@ -21,6 +29,12 @@
             前方一致のパス
             <div>
               <%= f.text_field :path %>
+            </div>
+          </td>
+          <td>
+            完全一致のパス(not include params)
+            <div>
+              <%= f.text_field :full_match_path %>
             </div>
           </td>
           <td>

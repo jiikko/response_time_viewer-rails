@@ -1,7 +1,7 @@
 class ResponseTimeViewer::Rails::SearchObject
   include ActiveModel::Model
 
-  attr_accessor :device, :path, :start_on, :end_on
+  attr_accessor :device, :path, :start_on, :end_on, :full_match_path
 
   def initialize(params)
     super(params)
@@ -22,6 +22,9 @@ class ResponseTimeViewer::Rails::SearchObject
     if path.present?
       @relation = @relation.like_search_by_path(path)
     end
+    if path.present? && full_match_path.present?
+      @relation = @relation.search_by_path(full_match_path)
+    end
     @summarized_requests = @relation
   end
 
@@ -37,7 +40,7 @@ class ResponseTimeViewer::Rails::SearchObject
     summarized_requests.group_by(&:path).each do |path, records|
       hash = {}
       hash[:name] = path
-      hash[:data] = records.map { |x| [x.summarized_at, x.total_ms] }
+      hash[:data] = records.map { |x| [x.summarized_at, x.total_ms] }.sort_by { |x, y| x }
       list << hash
     end
     list
@@ -47,7 +50,7 @@ class ResponseTimeViewer::Rails::SearchObject
 
   def reflection_form_attributes!
     if self.start_on.nil? && self.end_on.nil?
-      self.start_on = 1.week.ago.to_date
+      self.start_on = 1.year.ago.to_date
       self.end_on = Date.today
     end
     if self.start_on.is_a?(String) && self.end_on.is_a?(String)

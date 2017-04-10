@@ -8,6 +8,7 @@ class ResponseTimeViewer::Rails::SummarizedRequestsController < ResponseTimeView
     end
     @summarized_requests = @search_object.
       summarized_requests.
+      order(:summarized_at).
       page(params[:page]).
       per(200)
   end
