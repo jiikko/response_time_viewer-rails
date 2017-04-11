@@ -36,8 +36,6 @@ Contribution directions go here.
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
 ## TODO
-* パスを投稿するUI
-* グラフを描画する
 * index の見直し
 * モデルバリデーション
   * pathユニーク
