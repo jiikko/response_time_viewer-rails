@@ -4,13 +4,13 @@ class ResponseTimeViewer::Rails::SummarizedRequestsController < ResponseTimeView
     if params[:watching_url_group_id]
       watching_url_group = ResponseTimeViewer::Rails::WatchingUrlGroup.find(params[:watching_url_group_id])
       watching_urls = watching_url_group.watching_urls
-      @search_object.add_condition!(watching_urls: watching_urls)
+      @search_object.set_watching_urls_condition(watching_urls: watching_urls)
     end
     @summarized_requests = @search_object.
       summarized_requests.
       order(:summarized_at).
       page(params[:page]).
-      per(200)
+      per(500)
   end
 
   private

@@ -9,8 +9,8 @@ class ResponseTimeViewer::Rails::SearchObject
     reflection_form_attributes!
   end
 
-  def add_condition!(watching_urls: )
-    @relation.where!(path: watching_urls.select(:path))
+  def set_watching_urls_condition(watching_urls: )
+    @watching_url_paths = watching_urls.pluck(:path)
   end
 
   def summarized_requests
@@ -22,7 +22,7 @@ class ResponseTimeViewer::Rails::SearchObject
     if path.present?
       @relation = @relation.like_search_by_path(path)
     end
-    if path.present? && full_match_path.present?
+    if path.blank? && full_match_path.present?
       @relation = @relation.search_by_path(full_match_path)
     end
     @summarized_requests = @relation
@@ -37,10 +37,13 @@ class ResponseTimeViewer::Rails::SearchObject
 
   def chart_data
     list = []
-    summarized_requests.group_by(&:path).each do |path, records|
+    @watching_url_paths.map do |path|
       hash = {}
       hash[:name] = path
-      hash[:data] = records.map { |x| [x.summarized_at, x.total_ms] }.sort_by { |x, y| x }
+      hash[:data] = summarized_requests.
+        where(path: path).
+        limit(500).
+        map { |x| [x.summarized_at, x.total_ms] }
       list << hash
     end
     list
@@ -50,7 +53,7 @@ class ResponseTimeViewer::Rails::SearchObject
 
   def reflection_form_attributes!
     if self.start_on.nil? && self.end_on.nil?
-      self.start_on = 1.year.ago.to_date
+      self.start_on = 1.week.ago.to_date
       self.end_on = Date.today
     end
     if self.start_on.is_a?(String) && self.end_on.is_a?(String)
