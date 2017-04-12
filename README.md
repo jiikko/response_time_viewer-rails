@@ -40,3 +40,4 @@ The gem is available as open source under the terms of the [MIT License](http://
 * モデルバリデーション
   * pathユニーク
   * pathの存在チェック
+* 毎時間ログをチェックする場合、取り込み済みのログファイルをskipする
