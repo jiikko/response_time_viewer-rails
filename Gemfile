@@ -14,3 +14,5 @@ gemspec
 # gem 'byebug', group: [:development, :test]
 gem 'chartkick'
 gem 'kaminari'
+gem 'metscola', github: 'jiikko/metscola'
+gem 'sugoi_iko_yo_log_fetcher_ruby', github: 'jiikko/sugoi-iko-yo-log-fetcher-ruby'

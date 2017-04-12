@@ -44,6 +44,18 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
     end
   end
 
+  def self.fetch_log_and_import
+    yesterday = Date.today - 1
+    SugoiIkoYoLogFetcherRuby.chdir_with do |tmpdir|
+      runner = SugoiIkoYoLogFetcherRuby::Runner.new(yesterday)
+      runner.download!
+      paths = Metscola.run(Dir.glob("#{tmpdir}/**/*.gz"))
+      paths.each do |path|
+        import_from_file(File.open(path))
+      end
+    end
+  end
+
   def path_with_params
     if params
       "#{path}?#{params}"
