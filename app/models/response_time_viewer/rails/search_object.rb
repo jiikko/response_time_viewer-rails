@@ -1,7 +1,7 @@
 class ResponseTimeViewer::Rails::SearchObject
   include ActiveModel::Model
 
-  attr_accessor :device, :path, :start_on, :end_on, :full_match_path
+  attr_accessor :device, :path, :start_on, :end_on, :like_search
 
   def initialize(params)
     super(params)
@@ -9,8 +9,8 @@ class ResponseTimeViewer::Rails::SearchObject
     reflection_form_attributes!
   end
 
-  def set_watching_urls_condition(watching_urls: )
-    @watching_url_paths = watching_urls.pluck(:path)
+  def set_watching_url_paths(watching_url_paths)
+    @watching_url_paths = watching_url_paths
   end
 
   def summarized_requests
@@ -20,10 +20,7 @@ class ResponseTimeViewer::Rails::SearchObject
       @relation.where!(device: device)
     end
     if path.present?
-      @relation = @relation.like_search_by_path(path)
-    end
-    if path.blank? && full_match_path.present?
-      @relation = @relation.search_by_path(full_match_path)
+      @relation = @relation.search_by_path(path)
     end
     @summarized_requests = @relation
   end
@@ -40,14 +37,21 @@ class ResponseTimeViewer::Rails::SearchObject
     @watching_url_paths.map do |path|
       hash = {}
       hash[:name] = path
-      hash[:data] = summarized_requests.
-        where(path: path).
+      relation =
+        if like_search.present? && like_search == '1'
+          summarized_requests.like_search_by_path(path)
+        else
+          summarized_requests.search_by_path(path)
+        end
+      hash[:data] = relation.
         limit(500).
         map { |x| [x.summarized_at, x.total_ms] }
       list << hash
     end
     list
   end
+
+
 
   private
 
