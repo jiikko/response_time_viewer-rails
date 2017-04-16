@@ -11,7 +11,7 @@
         <td width='100px'>
           <div>
             両方 <%= f.radio_button :device, false, checked: true  %>
-        </div>
+          </div>
         <div>
           pc
           <%= f.radio_button :device, :pc %>
@@ -21,12 +21,20 @@
           <%= f.radio_button :device, :sp %>
         </div>
         </td>
-        <td>
-          前方一致のパス
-          <div>
-            <%= f.text_field :path %>
-          </div>
-        </td>
+        <% if params[:watching_url_group_id].blank? %>
+          <td>
+            完全一致のパス
+            <div>
+              <%= f.text_field :full_match_path_with_params %>
+            </div>
+          </td>
+          <td>
+            前方一致のパス
+            <div>
+              <%= f.text_field :like_match_path_with_params %>
+            </div>
+          </td>
+        <% end %>
         <td>
           <%= f.date_field :start_on %>
           <%= f.date_field :end_on %>
@@ -34,6 +42,44 @@
         <td>
           パラメータが付加しているのがでてくる
           <%= f.check_box :like_search %>
+        </td>
+        <td>
+          平均値を表示する
+          <%= f.check_box :show_agv %>
+        </td>
+        <td>
+          ページネーションを表示する
+          <%= f.check_box :show_pagination %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          total_ms
+          <br>
+          <%= f.text_field :total_ms_over_limit %>以上に絞る
+          <br>
+          <%= f.text_field :total_ms_under_limit %>以下に絞る
+        </td>
+        <td>
+          solr_ms
+          <br>
+          <%= f.text_field :solr_ms_over_limit %>以上に絞る
+          <br>
+          <%= f.text_field :solr_ms_under_limit %>以下に絞る
+        </td>
+        <td>
+          activerecord_ms
+          <br>
+          <%= f.text_field :ac_ms_over_limit %>以上に絞る
+          <br>
+          <%= f.text_field :ac_ms_under_limit %>以下に絞る
+        </td>
+        <td>
+          view_ms
+          <br>
+          <%= f.text_field :view_ms_over_limit %>以上に絞る
+          <br>
+          <%= f.text_field :view_ms_under_limit %>以下に絞る
         </td>
       </tr>
     </tbody>
@@ -43,6 +89,5 @@
 
 <% @paths.each do |path, summarized_requests| %>
   <h3><%= path %></h3>
-  <%= paginate summarized_requests %>
   <%= render 'table', summarized_requests: summarized_requests %>
 <% end %>

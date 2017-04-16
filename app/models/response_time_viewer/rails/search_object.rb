@@ -1,7 +1,23 @@
 class ResponseTimeViewer::Rails::SearchObject
   include ActiveModel::Model
 
-  attr_accessor :device, :path, :start_on, :end_on, :like_search
+  attr_accessor \
+    :device,
+    :full_match_path_with_params,
+    :like_match_path_with_params,
+    :start_on,
+    :end_on,
+    :like_search,
+    :total_ms_over_limit,
+    :total_ms_under_limit,
+    :solr_ms_over_limit,
+    :solr_ms_under_limit,
+    :ac_ms_over_limit,
+    :ac_ms_under_limit,
+    :view_ms_over_limit,
+    :view_ms_under_limit,
+    :show_agv,
+    :show_pagination
 
   def initialize(params)
     super(params)
@@ -19,9 +35,21 @@ class ResponseTimeViewer::Rails::SearchObject
     if device.present? && device != 'false'
       @relation.where!(device: device)
     end
-    if path.present?
-      @relation = @relation.search_by_path(path)
+    if full_match_path_with_params.present?
+      @relation = @relation.search_by_path(full_match_path_with_params)
     end
+    if like_match_path_with_params.present?
+      @relation = @relation.like_search_by_path(like_match_path_with_params)
+    end
+
+    @relation.where!('total_ms > ?', total_ms_over_limit) if total_ms_over_limit.present?
+    @relation.where!('total_ms < ?', total_ms_under_limit) if total_ms_under_limit.present?
+    @relation.where!('solr_ms > ?', solr_ms_over_limit) if solr_ms_over_limit.present?
+    @relation.where!('solr_ms < ?', solr_ms_under_limit) if solr_ms_under_limit.present?
+    @relation.where!('ac_ms > ?', ac_ms_over_limit) if ac_ms_over_limit.present?
+    @relation.where!('ac_ms < ?', ac_ms_under_limit) if ac_ms_under_limit.present?
+    @relation.where!('view_ms > ?', view_ms_over_limit) if view_ms_over_limit.present?
+    @relation.where!('view_ms < ?', view_ms_under_limit) if view_ms_under_limit.present?
     @summarized_requests = @relation
   end
 
