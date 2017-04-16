@@ -1,5 +1,9 @@
 <%= link_to 'top', root_path %>
-<%= line_chart @search_object.chart_data, download: true, stacked: true, curve: false, donut: true %>
+
+<%- if params[:watching_url_group_id].present? %>
+  <%= line_chart @search_object.chart_data, download: true, stacked: true, curve: false, donut: true %>
+<% end %>
+
 <%= form_for @search_object, url: "/response_time_viewer#{request.path_info}", method: :get do |f| %>
   <table border=1>
     <tbody>
@@ -37,13 +41,8 @@
   <div><%= f.submit %></div>
 <% end %>
 
-<%- if @paths.blank? %>
-  <%= paginate @summarized_requests %>
-  <%= render 'table', summarized_requests: @summarized_requests %>
-<%- else -%>
-  <% @paths.each do |path, summarized_requests| %>
-    <%= paginate summarized_requests %>
-    <h3><%= path %></h3>
-    <%= render 'table', summarized_requests: summarized_requests %>
-  <% end %>
+<% @paths.each do |path, summarized_requests| %>
+  <h3><%= path %></h3>
+  <%= paginate summarized_requests %>
+  <%= render 'table', summarized_requests: summarized_requests %>
 <% end %>

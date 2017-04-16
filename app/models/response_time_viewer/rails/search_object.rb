@@ -34,24 +34,32 @@ class ResponseTimeViewer::Rails::SearchObject
 
   def chart_data
     list = []
-    @watching_url_paths.map do |path|
+    path_with_summarized_requests do |path, summarized_requests|
       hash = {}
       hash[:name] = path
-      relation =
-        if like_search.present? && like_search == '1'
-          summarized_requests.like_search_by_path(path)
-        else
-          summarized_requests.search_by_path(path)
-        end
-      hash[:data] = relation.
+      hash[:data] = summarized_requests.
         limit(500).
-        map { |x| [x.summarized_at, x.total_ms] }
+        pluck(:summarized_at,:total_ms)
       list << hash
     end
     list
   end
 
+  def path_with_summarized_requests
+    if @watching_url_paths.blank?
+      return [yield('all', summarized_requests)]
+    end
 
+    @watching_url_paths.map do |path|
+      local_summarized_requests =
+        if like_search.present? && like_search == '1'
+          summarized_requests.like_search_by_path(path)
+        else
+          summarized_requests.search_by_path(path)
+        end
+      yield(path, local_summarized_requests)
+    end
+  end
 
   private
 

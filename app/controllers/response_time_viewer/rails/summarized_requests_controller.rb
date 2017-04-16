@@ -5,22 +5,11 @@ class ResponseTimeViewer::Rails::SummarizedRequestsController < ResponseTimeView
       watching_url_group = ResponseTimeViewer::Rails::WatchingUrlGroup.find(params[:watching_url_group_id])
       watching_url_paths = watching_url_group.watching_urls.pluck(:path)
       @search_object.set_watching_url_paths(watching_url_paths)
-      @paths = watching_url_paths.map do |path|
-        [
-          path,
-          @search_object.
-            summarized_requests.
-            search_by_path(path).
-            page(params[:page]).
-            per(500),
-        ]
-      end
-    else
-      @summarized_requests = @search_object.
-        summarized_requests.
-        order(:summarized_at).
-        page(params[:page]).
-        per(500)
+    end
+    @paths = @search_object.path_with_summarized_requests do |path, summarized_requests|
+      [ path,
+        summarized_requests.page(params[:page]).per(500).order(:summarized_at),
+      ]
     end
   end
 
