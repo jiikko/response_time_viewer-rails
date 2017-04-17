@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170407113314) do
+ActiveRecord::Schema.define(version: 20170417135105) do
+
+  create_table "response_time_viewer_rails_access_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "path",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_response_time_viewer_rails_access_logs_on_created_at", using: :btree
+    t.index ["path"], name: "index_response_time_viewer_rails_access_logs_on_path", unique: true, using: :btree
+  end
 
   create_table "response_time_viewer_rails_summarized_requests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "path",             limit: 191,               null: false

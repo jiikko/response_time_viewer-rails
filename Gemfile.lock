@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: git://github.com/jiikko/sugoi-iko-yo-log-fetcher-ruby.git
-  revision: 0f388a1c7075a8d05275b524557e1a5829c145f6
+  revision: 55a7c61ede691a58f5105f5682ba2a92ea5f4b55
   specs:
     sugoi_iko_yo_log_fetcher_ruby (0.1.0)
       aws-sdk (= 2.6.34)

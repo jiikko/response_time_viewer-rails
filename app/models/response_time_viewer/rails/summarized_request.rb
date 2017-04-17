@@ -45,13 +45,22 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
   end
 
   def self.fetch_log_and_import
-    yesterday = Date.today - 1
+    time_now = Time.now
+    # 取り込みのログはダウンロードしない
+    imported_access_logs = ResponseTimeViewer::Rails::AccessLog.where(created_at: time_now.beginning_of_day..time_now.end_of_day)
+    Metscola.summary_range = 60 * 10 * 6 # 60分
     SugoiIkoYoLogFetcherRuby.chdir_with do |tmpdir|
-      runner = SugoiIkoYoLogFetcherRuby::Runner.new(yesterday)
-      runner.download!
-      paths = Metscola.run(Dir.glob("#{tmpdir}/**/*.gz"))
-      paths.each do |path|
-        import_from_file(File.open(path))
+      runner = SugoiIkoYoLogFetcherRuby::Runner.new(time_now.to_date)
+      runner.download!(except_paths: imported_access_logs.pluck(:path))
+      downloaded_log_paths =
+        Dir.glob("#{tmpdir}/**/*.gz").map do |path|
+          ResponseTimeViewer::Rails::AccessLog.create!(path: path.remove("#{tmpdir}/"))
+          path
+        end
+      summarized_log_paths = Metscola.run(downloaded_log_paths)
+      binding.pry
+      summarized_log_paths.each do |path|
+        import_from_file(File.open(summarized_log_paths))
       end
     end
   end
