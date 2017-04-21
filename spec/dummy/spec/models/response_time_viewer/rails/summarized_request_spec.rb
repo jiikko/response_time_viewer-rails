@@ -10,7 +10,7 @@ describe ResponseTimeViewer::Rails::SummarizedRequest do
 {"total_ms":202.0,"mss":{"Views":62.3,"ActiveRecord":60.5,"Solr":8.3},"time":"2017-03-22 02:43:25 +0900","method":"GET","user_agent":"sp","path":"/events?page=2&prefecture_ids%5B%5D=10","merged_count":0}
           EOH
           file.write(body) && file.seek(0)
-          ResponseTimeViewer::Rails::SummarizedRequest.import_from_file(file)
+          ResponseTimeViewer::Rails::SummarizedRequest.import_from_file(file.path)
           expect(ResponseTimeViewer::Rails::SummarizedRequest.count).to eq(1)
           summarized_request = ResponseTimeViewer::Rails::SummarizedRequest.first
           expect(summarized_request.total_ms).to eq(202.0)
@@ -38,7 +38,7 @@ describe ResponseTimeViewer::Rails::SummarizedRequest do
 {"total_ms":202.0,"mss":{"Views":62.3,"ActiveRecord":60.5,"Solr":8.3},"time":"2017-03-22 02:43:25 +0900","method":"GET","user_agent":"sp","path":"/events?page=2&prefecture_ids%5B%5D=10","merged_count":0}
           EOH
           file.write(body) && file.seek(0)
-          ResponseTimeViewer::Rails::SummarizedRequest.import_from_file(file)
+          ResponseTimeViewer::Rails::SummarizedRequest.import_from_file(file.path)
           expect(ResponseTimeViewer::Rails::SummarizedRequest.count).to eq(3)
         ensure
           file.close

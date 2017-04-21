@@ -9,17 +9,8 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
   scope :search_by_path, ->(path) { where(path_with_params: path) }
 
   # 一度に26万件入ったが1万件ずつにわけたい
-  def self.import_from_file(file_or_path)
-    file =
-      case file_or_path
-      when String
-        File.open(file_or_path)
-      when File, Tempfile
-        file_or_path
-      else
-        raise('unknown file class')
-      end
-
+  def self.import_from_file(path)
+    file = File.open(path)
     ActiveRecord::Base.connection.reconnect! # mysql との接続が切れてしまっている対策
     loop do
       summarized_requests = []
@@ -71,18 +62,18 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
       runner = SugoiIkoYoLogFetcherRuby::Runner.new(*(yesterday..Time.now.to_date).to_a)
       runner.download!(except_paths: imported_access_logs.pluck(:path))
       Dir.glob("#{tmpdir}/**/*.gz").each do |path|
-        yield(path)
+        yield(path, path.remove("#{tmpdir}/"))
       end
     end
   end
 
   def self.fetch_log_and_import
-    fetch_log_with do |log_path|
-      access_log = ResponseTimeViewer::Rails::AccessLog.new(path: log_path.remove("#{tmpdir}/"))
+    fetch_log_with do |log_full_path, log_relative_path|
+      access_log = ResponseTimeViewer::Rails::AccessLog.new(path: log_relative_path)
       access_log.start_executing_time!
       begin
         self.import_from_file(
-          Metscola.run(log_path)
+          summarize_log(log_full_path)
         )
         access_log.status = ResponseTimeViewer::Rails::AccessLog.statuses[:success]
       rescue => e
@@ -92,6 +83,10 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
         access_log.stop_executing_time!
         access_log.create!
       end
+    end
+
+    def self.summarize_log(path)
+      Metscola.run(path)
     end
   end
 
