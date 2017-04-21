@@ -51,8 +51,11 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
         )
       end
       self.import(summarized_requests,
-                  on_duplicate_key_update: %i(path_with_params device summarized_at),
-                  timestamps: false)
+                  # 効かず
+                  # on_duplicate_key_update: [:path_with_params, :device, :summarized_at],
+                  timestamps: false,
+                  validate: false,
+                 )
       break unless continuing_read_file
     end
   end

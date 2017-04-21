@@ -12,6 +12,7 @@ require "sprockets/railtie"
 
 # depency gems
 require 'kaminari'
+require 'pry'
 
 Bundler.require(*Rails.groups)
 require "response_time_viewer/rails"

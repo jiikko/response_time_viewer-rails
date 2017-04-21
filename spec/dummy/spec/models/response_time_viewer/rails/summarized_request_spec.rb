@@ -25,6 +25,7 @@ describe ResponseTimeViewer::Rails::SummarizedRequest do
         ensure
           file.close
         end
+        ResponseTimeViewer::Rails::SummarizedRequest.destroy_all
       end
     end
     context '入力ファイルが 3 行あるとき' do
@@ -42,6 +43,7 @@ describe ResponseTimeViewer::Rails::SummarizedRequest do
         ensure
           file.close
         end
+        ResponseTimeViewer::Rails::SummarizedRequest.destroy_all
       end
     end
   end
