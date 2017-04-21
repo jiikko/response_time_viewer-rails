@@ -13,11 +13,12 @@
 ActiveRecord::Schema.define(version: 20170417135105) do
 
   create_table "response_time_viewer_rails_access_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "path",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["created_at"], name: "index_response_time_viewer_rails_access_logs_on_created_at", using: :btree
-    t.index ["path"], name: "index_response_time_viewer_rails_access_logs_on_path", unique: true, using: :btree
+    t.string   "path",           limit: 191,               null: false
+    t.integer  "status",                       default: 0, null: false
+    t.integer  "executing_time",               default: 0, null: false
+    t.text     "error_trace",    limit: 65535
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
   end
 
   create_table "response_time_viewer_rails_summarized_requests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -31,8 +32,6 @@ ActiveRecord::Schema.define(version: 20170417135105) do
     t.float    "view_ms",          limit: 24,  default: 0.0, null: false
     t.float    "ar_ms",            limit: 24,  default: 0.0, null: false
     t.float    "solr_ms",          limit: 24,  default: 0.0, null: false
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
     t.index ["path"], name: "index_summarized_requests_path", using: :btree
     t.index ["path_with_params"], name: "index_summarized_requests_path_with_params", using: :btree
     t.index ["summarized_at", "path"], name: "index_summarized_requests_summarized_at_path", using: :btree

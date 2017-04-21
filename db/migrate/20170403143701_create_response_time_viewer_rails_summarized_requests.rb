@@ -14,8 +14,6 @@ class CreateResponseTimeViewerRailsSummarizedRequests < ActiveRecord::Migration[
       t.index [:summarized_at, :path], name: :index_summarized_requests_summarized_at_path
       t.index :path, name: :index_summarized_requests_path
       t.index :path_with_params, name: :index_summarized_requests_path_with_params
-
-      t.timestamps null: false
     end
   end
 end

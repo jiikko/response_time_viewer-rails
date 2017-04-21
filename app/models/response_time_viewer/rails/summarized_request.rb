@@ -9,7 +9,18 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
   scope :search_by_path, ->(path) { where(path_with_params: path) }
 
   # 一度に26万件入ったが1万件ずつにわけたい
-  def self.import_from_file(file)
+  def self.import_from_file(file_or_path)
+    file =
+      case file_or_path
+      when String
+        File.open(file_or_path)
+      when File, Tempfile
+        file_or_path
+      else
+        raise('unknown file class')
+      end
+
+    ActiveRecord::Base.connection.reconnect! # mysql との接続が切れてしまっている対策
     loop do
       summarized_requests = []
       continuing_read_file = true
@@ -39,30 +50,44 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
           solr_ms: hash['mss']['Solr'] || 0,
         )
       end
-      self.import(summarized_requests)
+      self.import(summarized_requests,
+                  on_duplicate_key_update: %i(path_with_params device summarized_at),
+                  timestamps: false)
       break unless continuing_read_file
     end
   end
 
-  def self.fetch_log_and_import
+  def self.fetch_log_with
     yesterday = Date.today - 1
     # 取り込みのログはダウンロードしない
-    imported_access_logs = ResponseTimeViewer::Rails::AccessLog.where('created_at > ?', yesterday.beginning_of_day)
+    imported_access_logs = ResponseTimeViewer::Rails::AccessLog.where(
+      'created_at > ?', yesterday.beginning_of_day
+    )
     Metscola.summary_range = 60 * 10 * 6 # 60分
     SugoiIkoYoLogFetcherRuby.chdir_with do |tmpdir|
       runner = SugoiIkoYoLogFetcherRuby::Runner.new(*(yesterday..Time.now.to_date).to_a)
       runner.download!(except_paths: imported_access_logs.pluck(:path))
-      downloaded_log_paths =
-        Dir.glob("#{tmpdir}/**/*.gz").map do |path|
-          ResponseTimeViewer::Rails::AccessLog.create!(path: path.remove("#{tmpdir}/"))
-          path
-        end
-      summarized_log_paths = Metscola.run(downloaded_log_paths)
+      Dir.glob("#{tmpdir}/**/*.gz").each do |path|
+        yield(path)
+      end
+    end
+  end
 
-      # 接続が切れることがあった
-      summarized_log_paths.each do |summarized_log_path|
-        ActiveRecord::Base.connection.reconnect!
-        import_from_file(File.open(summarized_log_path))
+  def self.fetch_log_and_import
+    fetch_log_with do |log_path|
+      access_log = ResponseTimeViewer::Rails::AccessLog.new(path: log_path.remove("#{tmpdir}/"))
+      access_log.start_executing_time!
+      begin
+        self.import_from_file(
+          Metscola.run(log_path)
+        )
+        access_log.status = ResponseTimeViewer::Rails::AccessLog.statuses[:success]
+      rescue => e
+        access_log.error_trace = e.backtrace.join("\n")
+        access_log.status = ResponseTimeViewer::Rails::AccessLog.statuses[:failure]
+      ensure
+        access_log.stop_executing_time!
+        access_log.create!
       end
     end
   end
