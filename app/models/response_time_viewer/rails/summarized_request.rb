@@ -51,27 +51,9 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
     end
   end
 
-  def self.fetch_log_with
-    imported_access_logs = ResponseTimeViewer::Rails::AccessLog.yesterday
-    Metscola.summary_range = 60 * 10 * 6 # 60分
-    SugoiIkoYoLogFetcherRuby.chdir_with do |tmpdir|
-      download!(except_paths: imported_access_logs.pluck(:path))
-      Dir.glob("#{tmpdir}/**/*.gz").each do |path|
-        yield(path, path.remove("#{tmpdir}/"))
-      end
-    end
-  end
-
-  def self.download!
-    yesterday = Date.today - 1
-    runner = SugoiIkoYoLogFetcherRuby::Runner.new(*(yesterday..Time.now.to_date).to_a)
-    runner.download!(except_paths: imported_access_logs.pluck(:path))
-  end
-
   def self.fetch_log_and_import
-    fetch_log_with do |log_full_path, log_relative_path|
-      access_log = ResponseTimeViewer::Rails::AccessLog.new(path: log_relative_path)
-      access_log.start_executing_time!
+    ResponseTimeViewer::Rails::LogDownloadService.downloaded_log_with do |log_full_path, log_relative_path|
+      access_log = ResponseTimeViewer::Rails::AccessLog.new(path: log_relative_path, executing_time: Time.now)
       begin
         self.import_from_file(
           self.summarize_log(log_full_path)
@@ -81,7 +63,6 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
         access_log.error_trace = e.backtrace.join("\n")
         access_log.status = ResponseTimeViewer::Rails::AccessLog.statuses[:failure]
       ensure
-        access_log.stop_executing_time!
         access_log.save!
       end
     end
