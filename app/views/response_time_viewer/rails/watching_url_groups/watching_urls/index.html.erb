@@ -27,10 +27,7 @@
       <tr>
         <td><%= watching_url.path[0..40] %></td>
         <td>
-          <%= form_tag watching_url_group_watching_url_path(@watching_url_group, watching_url), method: :delete do %>
-            <%= hidden_field_tag :watching_url_id, watching_url.id %>
-            <%= submit_tag '削除する' %>
-          <% end %>
+          <%= link_to '削除する', [@watching_url_group, watching_url], method: :delete, remote: true %>
         </td>
       </tr>
     <% end %>
@@ -52,12 +49,7 @@
     <%- @addable_watching_urls.each do |watching_url| %>
       <tr>
         <td><%= watching_url.path[0..40] %></td>
-        <td>
-          <%# link_to ..., ..., method: :post でしたかったけど開発環境で ujs が動かないのでformにする %>
-          <%= form_tag watching_url_group_watching_urls_path(@watching_url_group), method: :post do %>
-            <%= hidden_field_tag :watching_url_id, watching_url.id %>
-            <%= submit_tag '追加する' %>
-          <% end %>
+        <td><%= link_to '追加する', watching_url_group_watching_urls_path(@watching_url_group, watching_url_id: watching_url.id), method: :post, remote: true %></td>
       </tr>
     <% end %>
   </tbody>

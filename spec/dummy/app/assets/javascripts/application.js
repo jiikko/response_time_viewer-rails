@@ -11,4 +11,6 @@
 // about supported directives.
 //= require Chart.bundle
 //= require chartkick
+//= require jquery
+//= require jquery_ujs/
 //= require_tree .
