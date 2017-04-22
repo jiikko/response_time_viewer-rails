@@ -1,6 +1,6 @@
 module ResponseTimeViewer::Rails
   class AccessLog < ApplicationRecord
-    enum status: %i(success failure)
+    enum status: %i(success failure_summarize failure_import)
 
     scope :yesterday, ->() {
       yesterday = Date.today - 1

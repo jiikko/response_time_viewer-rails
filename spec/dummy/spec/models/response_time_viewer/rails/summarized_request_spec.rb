@@ -23,14 +23,25 @@ describe ResponseTimeViewer::Rails::SummarizedRequest do
       end
     end
     describe '異常系' do
-      context 'ログの集計が失敗する時' do
-        it 'AccessLogレコードを作成してstatusがfailureであること' do
-          allow(ResponseTimeViewer::Rails::SummarizedRequest).to receive(:summarize_log).and_return(nil)
+      context 'ログの集計に失敗する時' do
+        it 'AccessLogレコードを作成してstatusがfailure_summarizeであること' do
+          allow(ResponseTimeViewer::Rails::SummarizedRequest).to receive(:summarize_log).and_raise(RuntimeError)
           ResponseTimeViewer::Rails::SummarizedRequest.fetch_log_and_import
           records = ResponseTimeViewer::Rails::AccessLog.where(path: 'foo.log')
           expect(records.count).to eq(1)
           access_log = records.first
-          expect(access_log.status).to eq('failure')
+          expect(access_log.status).to eq('failure_summarize')
+          expect(access_log.error_trace).not_to eq(nil)
+        end
+      end
+      context 'ログの取り込みに失敗する時' do
+        it 'AccessLogレコードを作成してstatusがfailure_importであること' do
+          allow(ResponseTimeViewer::Rails::SummarizedRequest).to receive(:import_from_file).and_raise(RuntimeError)
+          ResponseTimeViewer::Rails::SummarizedRequest.fetch_log_and_import
+          records = ResponseTimeViewer::Rails::AccessLog.where(path: 'foo.log')
+          expect(records.count).to eq(1)
+          access_log = records.first
+          expect(access_log.status).to eq('failure_summarize')
           expect(access_log.error_trace).not_to eq(nil)
         end
       end

@@ -41,12 +41,7 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
           solr_ms: hash['mss']['Solr'] || 0,
         )
       end
-      self.import(summarized_requests,
-                  # 効かず
-                  # on_duplicate_key_update: [:path_with_params, :device, :summarized_at],
-                  timestamps: false,
-                  validate: false,
-                 )
+      self.import(summarized_requests, timestamps: false, validate: false)
       break unless continuing_read_file
     end
   end
@@ -55,16 +50,23 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
     ResponseTimeViewer::Rails::LogDownloadService.downloaded_log_with do |log_full_path, log_relative_path|
       access_log = ResponseTimeViewer::Rails::AccessLog.new(path: log_relative_path, executing_time: Time.now)
       begin
-        self.import_from_file(
-          self.summarize_log(log_full_path)
-        )
-        access_log.status = ResponseTimeViewer::Rails::AccessLog.statuses[:success]
+        summarized_log_path = self.summarize_log(log_full_path)
       rescue => e
-        access_log.error_trace = e.backtrace.join("\n")
-        access_log.status = ResponseTimeViewer::Rails::AccessLog.statuses[:failure]
+        access_log.error_trace = e.inspect
+        access_log.status = ResponseTimeViewer::Rails::AccessLog.statuses[:failure_summarize]
+        access_log.save! && return
       ensure
-        access_log.save!
       end
+
+      begin
+        import_from_file(summarized_log_path)
+      rescue => e
+        access_log.error_trace = e.inspect
+        access_log.status = ResponseTimeViewer::Rails::AccessLog.statuses[:failure_import]
+        access_log.save! && return
+      end
+      access_log.status = ResponseTimeViewer::Rails::AccessLog.statuses[:success]
+      access_log.save!
     end
   end
 
