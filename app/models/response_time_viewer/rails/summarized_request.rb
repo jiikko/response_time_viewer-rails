@@ -52,19 +52,20 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
   end
 
   def self.fetch_log_with
-    yesterday = Date.today - 1
-    # 取り込みのログはダウンロードしない
-    imported_access_logs = ResponseTimeViewer::Rails::AccessLog.where(
-      'created_at > ?', yesterday.beginning_of_day
-    )
+    imported_access_logs = ResponseTimeViewer::Rails::AccessLog.yesterday
     Metscola.summary_range = 60 * 10 * 6 # 60分
     SugoiIkoYoLogFetcherRuby.chdir_with do |tmpdir|
-      runner = SugoiIkoYoLogFetcherRuby::Runner.new(*(yesterday..Time.now.to_date).to_a)
-      runner.download!(except_paths: imported_access_logs.pluck(:path))
+      download!(except_paths: imported_access_logs.pluck(:path))
       Dir.glob("#{tmpdir}/**/*.gz").each do |path|
         yield(path, path.remove("#{tmpdir}/"))
       end
     end
+  end
+
+  def self.download!
+    yesterday = Date.today - 1
+    runner = SugoiIkoYoLogFetcherRuby::Runner.new(*(yesterday..Time.now.to_date).to_a)
+    runner.download!(except_paths: imported_access_logs.pluck(:path))
   end
 
   def self.fetch_log_and_import
