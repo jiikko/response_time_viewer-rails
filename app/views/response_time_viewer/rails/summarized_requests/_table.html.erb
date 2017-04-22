@@ -12,20 +12,6 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th>平均値</th>
-      <th>-</th>
-      <% if @search_object.show_agv == '1' %>
-        <th><%= summarized_requests.average(:view_ms).to_i %></th>
-        <th><%= summarized_requests.average(:ar_ms).to_i %></th>
-        <th><%= summarized_requests.average(:solr_ms).to_i %></th>
-        <th><%= summarized_requests.average(:total_ms).to_i %></th>
-      <% else %>
-        <th colspan=4></th>
-      <% end %>
-      <th>-</th>
-      <th>-</th>
-    </tr>
     <%- summarized_requests.each do |summarized_request| %>
       <tr>
         <td><%= summarized_request.path_with_params[0..40] %></td>

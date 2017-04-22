@@ -1,6 +1,11 @@
-<%= link_to 'top', root_path %>
+<div>
+  <%= link_to 'top', root_path %>
+</div>
 
 <%- if params[:watching_url_group_id].present? %>
+  <div>
+    <%= link_to 'URLを編集する', watching_url_group_watching_urls_path(params[:watching_url_group_id]) %>
+  </div>
   <%= line_chart @search_object.chart_data, download: true, stacked: true, curve: false, donut: true %>
 <% end %>
 
@@ -85,6 +90,12 @@
     </tbody>
   </table>
   <div><%= f.submit %></div>
+<% end %>
+
+
+<% if @search_object.show_agv == '1' %>
+  <h3>平均値など</h3>
+  <%= render 'total_table', paths: @paths %>
 <% end %>
 
 <% @paths.each do |path, summarized_requests| %>
