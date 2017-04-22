@@ -12,13 +12,13 @@ module ResponseTimeViewer
         end
       end
 
-      private
-
       def run
         yesterday = Date.today - 1
         runner = SugoiIkoYoLogFetcherRuby::Runner.new(*(yesterday..Time.now.to_date).to_a)
         runner.download!(except_paths: imported_access_log_paths)
       end
+
+      private
 
       def imported_access_log_paths
         ResponseTimeViewer::Rails::AccessLog.yesterday.pluck(:path)
