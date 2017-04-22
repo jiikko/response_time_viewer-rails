@@ -5,7 +5,7 @@ module ResponseTimeViewer
         service = self.new
         Metscola.summary_range = 60 * 10 * 6 # 60分
         SugoiIkoYoLogFetcherRuby.chdir_with do |tmpdir|
-          service.download!
+          service.run
           Dir.glob("#{tmpdir}/**/*.gz").each do |path|
             yield(path, path.remove("#{tmpdir}/"))
           end
@@ -14,7 +14,7 @@ module ResponseTimeViewer
 
       private
 
-      def download!
+      def run
         yesterday = Date.today - 1
         runner = SugoiIkoYoLogFetcherRuby::Runner.new(*(yesterday..Time.now.to_date).to_a)
         runner.download!(except_paths: imported_access_log_paths)

@@ -1,0 +1,25 @@
+<%= link_to 'top', root_path %>
+<%= paginate @access_logs %>
+
+<table border='1'>
+  <thead>
+    <tr>
+      <th>パス</th>
+      <th>実行時間</th>
+      <th>ステータス</th>
+      <th>error_trace</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- @access_logs.each do |access_log| %>
+      <tr>
+        <td><%= access_log.path %></td>
+        <td><%= access_log.executing_time  %></td>
+        <td><%= access_log.status %></td>
+        <td><%= (access_log.error_trace && access_log.error_trace[0..50] || :-) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate @access_logs %>

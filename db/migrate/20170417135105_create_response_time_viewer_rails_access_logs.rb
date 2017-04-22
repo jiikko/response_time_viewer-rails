@@ -5,6 +5,7 @@ class CreateResponseTimeViewerRailsAccessLogs < ActiveRecord::Migration[5.0]
       t.integer :status, null: false, default: 0
       t.integer :executing_time, null: false, default: 0
       t.text :error_trace
+      t.index :path, unique: :path
 
       t.timestamps
     end

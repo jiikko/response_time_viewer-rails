@@ -12,16 +12,17 @@
 
 ActiveRecord::Schema.define(version: 20170417135105) do
 
-  create_table "response_time_viewer_rails_access_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "response_time_viewer_rails_access_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string   "path",           limit: 191,               null: false
     t.integer  "status",                       default: 0, null: false
     t.integer  "executing_time",               default: 0, null: false
     t.text     "error_trace",    limit: 65535
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
+    t.index ["path"], name: "index_response_time_viewer_rails_access_logs_on_path", unique: true, using: :btree
   end
 
-  create_table "response_time_viewer_rails_summarized_requests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "response_time_viewer_rails_summarized_requests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string   "path",             limit: 191,               null: false
     t.string   "params",           limit: 191
     t.string   "path_with_params", limit: 191,               null: false
@@ -37,7 +38,7 @@ ActiveRecord::Schema.define(version: 20170417135105) do
     t.index ["summarized_at", "path"], name: "index_summarized_requests_summarized_at_path", using: :btree
   end
 
-  create_table "response_time_viewer_rails_watching_url_groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "response_time_viewer_rails_watching_url_groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string   "name",                                          null: false
     t.integer  "watchi_urls_counter",               default: 0, null: false
     t.text     "memo",                limit: 65535
@@ -45,12 +46,12 @@ ActiveRecord::Schema.define(version: 20170417135105) do
     t.datetime "updated_at",                                    null: false
   end
 
-  create_table "response_time_viewer_rails_watching_url_groups_urls", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "response_time_viewer_rails_watching_url_groups_urls", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "watching_url_group_id"
     t.integer "watching_url_id"
   end
 
-  create_table "response_time_viewer_rails_watching_urls", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "response_time_viewer_rails_watching_urls", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string   "path",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
