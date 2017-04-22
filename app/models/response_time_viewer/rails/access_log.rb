@@ -7,7 +7,7 @@ module ResponseTimeViewer::Rails
       where('created_at > ?', yesterday.beginning_of_day)
     }
 
-    after_save :stop_executing_time!
+    before_save :stop_executing_time!
 
     def stop_executing_time!
       if executing_time.present?
