@@ -73,7 +73,7 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
       access_log.start_executing_time!
       begin
         self.import_from_file(
-          summarize_log(log_full_path)
+          self.summarize_log(log_full_path)
         )
         access_log.status = ResponseTimeViewer::Rails::AccessLog.statuses[:success]
       rescue => e
@@ -81,13 +81,13 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
         access_log.status = ResponseTimeViewer::Rails::AccessLog.statuses[:failure]
       ensure
         access_log.stop_executing_time!
-        access_log.create!
+        access_log.save!
       end
     end
+  end
 
-    def self.summarize_log(path)
-      Metscola.run(path)
-    end
+  def self.summarize_log(path)
+    Metscola.run(path)
   end
 
   def path_with_params

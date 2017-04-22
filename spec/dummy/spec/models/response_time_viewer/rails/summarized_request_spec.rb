@@ -1,6 +1,45 @@
 require 'rails_helper'
 
 describe ResponseTimeViewer::Rails::SummarizedRequest do
+  describe '.fetch_log_and_import' do
+    before(:each) do
+      ResponseTimeViewer::Rails::AccessLog.delete_all
+      allow(ResponseTimeViewer::Rails::SummarizedRequest).to receive(:fetch_log_with).and_yield('/tmp/foo.log', 'foo.log')
+      expect_any_instance_of(ResponseTimeViewer::Rails::AccessLog).to receive(:start_executing_time!).once
+      expect_any_instance_of(ResponseTimeViewer::Rails::AccessLog).to receive(:stop_executing_time!).once
+    end
+    describe '正常系' do
+      context 'ログの集計が成功する時' do
+        it 'AccessLogレコードを作成してstatusがsuccessであること' do
+          file = Tempfile.new
+          allow(ResponseTimeViewer::Rails::SummarizedRequest).to receive(:summarize_log).and_return(file.path)
+          ResponseTimeViewer::Rails::SummarizedRequest.fetch_log_and_import
+          records = ResponseTimeViewer::Rails::AccessLog.where(path: 'foo.log')
+          expect(records.count).to eq(1)
+          access_log = records.first
+          expect(access_log.status).to eq('success')
+          expect(access_log.error_trace).to eq(nil)
+          expect(access_log.executing_time).to eq(0)
+          file.close
+        end
+      end
+      describe '異常系' do
+        context 'ログの集計が失敗する時' do
+          it 'AccessLogレコードを作成してstatusがfailureであること' do
+            allow(ResponseTimeViewer::Rails::SummarizedRequest).to receive(:summarize_log).and_return(nil)
+            ResponseTimeViewer::Rails::SummarizedRequest.fetch_log_and_import
+            records = ResponseTimeViewer::Rails::AccessLog.where(path: 'foo.log')
+            expect(records.count).to eq(1)
+            access_log = records.first
+            expect(access_log.status).to eq('failure')
+            expect(access_log.error_trace).not_to eq(nil)
+            expect(access_log.executing_time).to eq(0)
+          end
+        end
+      end
+    end
+  end
+
   describe '.import_from_file' do
     context '入力ファイルが 1 行あるとき' do
       it '1 レコード作成すること' do
