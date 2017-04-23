@@ -16,7 +16,7 @@
     <%- @access_logs.each do |access_log| %>
       <tr>
         <td><%= access_log.path %></td>
-        <td><%= access_log.success? ? access_log.executing_time : (Time.now - access_log.executing_time) %></td>
+        <td><%= access_log.success? ? access_log.executing_time : (Time.now - access_log.executing_time).to_i %></td>
         <td><%= access_log.status %></td>
         <td><%= (access_log.error_trace && access_log.error_trace[0..50] || :-) %></td>
         <td><%= access_log.created_at %></td>
