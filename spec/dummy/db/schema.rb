@@ -47,8 +47,10 @@ ActiveRecord::Schema.define(version: 20170417135105) do
   end
 
   create_table "response_time_viewer_rails_watching_url_groups_urls", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.integer "watching_url_group_id"
-    t.integer "watching_url_id"
+    t.integer  "watching_url_group_id"
+    t.integer  "watching_url_id"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
     t.index ["watching_url_group_id", "watching_url_id"], name: "index_watching_url_group_id_watching_url_id", unique: true, using: :btree
   end
 

@@ -40,7 +40,7 @@ module ResponseTimeViewer::Rails
     private
 
     def set_variables
-      @watching_urls = @watching_url_group.watching_urls
+      @watching_urls = @watching_url_group.watching_urls.order('response_time_viewer_rails_watching_url_groups_urls.created_at asc')
       @addable_watching_urls = WatchingUrl.where.not(id: @watching_urls).
         page(params[:page]).
         per(200)
