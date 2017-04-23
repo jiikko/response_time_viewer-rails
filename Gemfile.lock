@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/jiikko/metscola.git
-  revision: bed81ca88ab3cd180b3b7fcce73539282477bfe1
+  revision: 05772f9750b87a5aea1dc2fe6fc99fc9adb94dfe
   specs:
     metscola (0.1.0)
       parallel
