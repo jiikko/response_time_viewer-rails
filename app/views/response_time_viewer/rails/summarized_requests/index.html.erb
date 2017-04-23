@@ -99,7 +99,7 @@
 <% end %>
 
 <% @paths.each do |path, summarized_requests| %>
-  <h3><%= path %></h3>
+  <h3 id="<%= path %>"><%= path %></h3>
   <%= paginate(summarized_requests) if @search_object.show_pagination == '1' %>
   <%= render 'table', summarized_requests: summarized_requests %>
 <% end %>

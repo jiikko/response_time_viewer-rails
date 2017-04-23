@@ -12,7 +12,7 @@
   <tbody>
     <% paths.each do |path, summarized_requests| %>
       <tr>
-        <th><%= path %></th>
+        <th><%= link_to path, "##{path}" %></th>
         <th><%= summarized_requests.average(:view_ms).to_i %></th>
         <th><%= summarized_requests.average(:ar_ms).to_i %></th>
         <th><%= summarized_requests.average(:solr_ms).to_i %></th>

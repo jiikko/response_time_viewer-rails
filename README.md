@@ -44,3 +44,5 @@ The gem is available as open source under the terms of the [MIT License](http://
 * パラメータが長いので省略しているページでオンマウスでフルのパラメータを表示する
 * URLを新規作成する時に既存URLに存在するのかの確認できるようにする
 * 正規表現とかでURLのグループを作ってレスポンスタイムでヒストグラム的なのを作る
+* WatchingURLを削除したら多対多のレコードも削除する
+* 検索画面のチェックボックスのラベルにもクリック判定をつける
