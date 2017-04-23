@@ -12,6 +12,7 @@ describe ResponseTimeViewer::Rails::SummarizedRequest do
         it 'AccessLogレコードを作成してstatusがsuccessであること' do
           file = Tempfile.new
           allow(ResponseTimeViewer::Rails::SummarizedRequest).to receive(:summarize_log).and_return(file.path)
+          allow(ResponseTimeViewer::Rails::SummarizedRequest).to receive(:import_from_file).and_return(nil)
           ResponseTimeViewer::Rails::SummarizedRequest.fetch_log_and_import
           records = ResponseTimeViewer::Rails::AccessLog.where(path: 'foo.log')
           expect(records.count).to eq(1)

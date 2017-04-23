@@ -48,13 +48,17 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
 
   def self.fetch_log_and_import
     ResponseTimeViewer::Rails::LogDownloadService.downloaded_log_with do |log_full_path, log_relative_path|
-      access_log = ResponseTimeViewer::Rails::AccessLog.new(path: log_relative_path, executing_time: Time.now)
+      access_log = ResponseTimeViewer::Rails::AccessLog.create!(path: log_relative_path,
+                                                                executing_time: Time.now,
+                                                                status: ResponseTimeViewer::Rails::AccessLog.statuses[:downloaded])
       begin
         summarized_log_path = self.summarize_log(log_full_path)
       rescue => e
         access_log.error_trace = e.inspect
         access_log.status = ResponseTimeViewer::Rails::AccessLog.statuses[:failure_summarize]
-        access_log.save! && return
+        access_log.stop_executing_time!
+        access_log.save!
+        return
       ensure
       end
 
@@ -63,9 +67,12 @@ class ResponseTimeViewer::Rails::SummarizedRequest < ResponseTimeViewer::Rails::
       rescue => e
         access_log.error_trace = e.inspect
         access_log.status = ResponseTimeViewer::Rails::AccessLog.statuses[:failure_import]
-        access_log.save! && return
+        access_log.stop_executing_time!
+        access_log.save!
+        return
       end
       access_log.status = ResponseTimeViewer::Rails::AccessLog.statuses[:success]
+      access_log.stop_executing_time!
       access_log.save!
     end
   end
