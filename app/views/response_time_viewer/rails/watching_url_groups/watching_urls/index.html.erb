@@ -20,12 +20,14 @@
     <tr>
       <th>name</th>
       <th>-</th>
+      <th>-</th>
     </tr>
   </thead>
   <tbody>
     <%- @watching_urls.each do |watching_url| %>
       <tr>
         <td><%= watching_url.path[0..40] %></td>
+        <td><%= '190文字を超えているのでカットされています'if watching_url.path.length >= 190 %></td>
         <td>
           <%= link_to '削除する', [@watching_url_group, watching_url], method: :delete, remote: true %>
         </td>
@@ -43,12 +45,14 @@
     <tr>
       <th>name</th>
       <th>-</th>
+      <th>-</th>
     </tr>
   </thead>
   <tbody>
     <%- @addable_watching_urls.each do |watching_url| %>
       <tr>
         <td><%= watching_url.path[0..40] %></td>
+        <td><%= '190文字を超えているのでカットされています'if watching_url.path.length >= 190 %></td>
         <td><%= link_to '追加する', watching_url_group_watching_urls_path(@watching_url_group, watching_url_id: watching_url.id), method: :post, remote: true %></td>
       </tr>
     <% end %>
