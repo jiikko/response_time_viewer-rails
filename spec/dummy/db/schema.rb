@@ -55,10 +55,10 @@ ActiveRecord::Schema.define(version: 20170417135105) do
   end
 
   create_table "response_time_viewer_rails_watching_urls", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.string   "path",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["path"], name: "index_response_time_viewer_rails_watching_urls_path", unique: true, using: :btree
+    t.string   "path",       limit: 191, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.index ["path"], name: "index_response_time_viewer_rails_watching_urls_on_path", unique: true, using: :btree
   end
 
 end
