@@ -24,15 +24,16 @@ $ gem install response_time_viewer-rails
 ## Development
 ### start server
 
-サーバ起動
+#### サーバ起動
 
 ```
 bundle exec rake db:create && bundle exec rake db:migrate
 cd spec/dummy
 bundle exec rails server
 ```
+open http://localhost:3000/response_time_viewer !!!
 
-集計する
+#### 集計する
 
 ```
 cd spec/dummy
