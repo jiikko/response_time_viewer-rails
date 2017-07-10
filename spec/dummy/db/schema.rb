@@ -33,9 +33,14 @@ ActiveRecord::Schema.define(version: 20170417135105) do
     t.float    "view_ms",          limit: 24,  default: 0.0, null: false
     t.float    "ar_ms",            limit: 24,  default: 0.0, null: false
     t.float    "solr_ms",          limit: 24,  default: 0.0, null: false
+    t.index ["ar_ms"], name: "index_response_time_viewer_rails_summarized_requests_on_ar_ms", using: :btree
+    t.index ["merged_count"], name: "index_summarized_requests_merged_count", using: :btree
     t.index ["path"], name: "index_summarized_requests_path", using: :btree
     t.index ["path_with_params"], name: "index_summarized_requests_path_with_params", using: :btree
+    t.index ["solr_ms"], name: "index_response_time_viewer_rails_summarized_requests_on_solr_ms", using: :btree
     t.index ["summarized_at", "path"], name: "index_summarized_requests_summarized_at_path", using: :btree
+    t.index ["total_ms"], name: "index_response_time_viewer_rails_summarized_requests_on_total_ms", using: :btree
+    t.index ["view_ms"], name: "index_response_time_viewer_rails_summarized_requests_on_view_ms", using: :btree
   end
 
   create_table "response_time_viewer_rails_watching_url_groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
