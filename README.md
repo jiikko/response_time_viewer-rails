@@ -23,10 +23,21 @@ $ gem install response_time_viewer-rails
 
 ## Development
 ### start server
+
+サーバ起動
+
+```
+bundle exec rake db:create && bundle exec rake db:migrate
+cd spec/dummy
+bundle exec rails server
+```
+
+集計する
+
 ```
 cd spec/dummy
-bundle exec rake db:create && bundle exec rake db:migrate
-bundle exec rails server
+be rails console
+ResponseTimeViewer::Rails::SummarizedRequest::fetch_log_and_import
 ```
 
 ## Contributing
