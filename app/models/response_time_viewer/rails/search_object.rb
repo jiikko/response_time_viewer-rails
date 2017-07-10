@@ -46,8 +46,8 @@ class ResponseTimeViewer::Rails::SearchObject
     @relation.where!('total_ms < ?', total_ms_under_limit) if total_ms_under_limit.present?
     @relation.where!('solr_ms > ?', solr_ms_over_limit) if solr_ms_over_limit.present?
     @relation.where!('solr_ms < ?', solr_ms_under_limit) if solr_ms_under_limit.present?
-    @relation.where!('ac_ms > ?', ac_ms_over_limit) if ac_ms_over_limit.present?
-    @relation.where!('ac_ms < ?', ac_ms_under_limit) if ac_ms_under_limit.present?
+    @relation.where!('ar_ms > ?', ac_ms_over_limit) if ac_ms_over_limit.present?
+    @relation.where!('ar_ms < ?', ac_ms_under_limit) if ac_ms_under_limit.present?
     @relation.where!('view_ms > ?', view_ms_over_limit) if view_ms_over_limit.present?
     @relation.where!('view_ms < ?', view_ms_under_limit) if view_ms_under_limit.present?
     @summarized_requests = @relation
